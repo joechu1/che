@@ -61,7 +61,7 @@ services:
 <% if scope.lookupvar('che::che_single_port') == 'true' -%>
     labels:
       traefik.che.frontend.backend: "che-server"
-      traefik.che.frontend.entryPoints: "http"
+      traefik.che.frontend.entryPoints: "http,https"
       traefik.che.port: "<%= scope.lookupvar('che::che_port') -%>"
       traefik.che.frontend.rule: "PathPrefix:/"
 <% if scope.lookupvar('che::che_multiuser') == 'true' -%>
@@ -94,6 +94,7 @@ services:
     labels:
       traefik.enable: "false"
     ports:
+      - '443:443'
       - '<%= scope.lookupvar('che::che_port') -%>:<%= scope.lookupvar('che::che_port') -%>'
 <% if scope.lookupvar('che::che_env') == 'development' -%>
       - '7070:7070'
@@ -101,6 +102,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - '<%= scope.lookupvar('che::che_instance') -%>/config/traefik:/etc/traefik'
+      - '/etc/ssl/certs/cert.crt:/cert.crt'
+      - '/etc/ssl/private/cert.pem:/cert.pem'
     restart: always
 <% end -%>
 

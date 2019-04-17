@@ -87,5 +87,19 @@ address = ":7070"
   [entryPoints.http]
   address = ":<%= scope.lookupvar('che::che_port') -%>"
 
+  [entryPoints.https]
+  address = ":443"
+  [entryPoints.https.tls]
+  [[entryPoints.https.tls.certificates]]
+  certFile = "/cert.crt"
+  keyFile = "/cert.pem"
+  [entryPoints.https.auth]
+      headerField = "X-WebAuth-User"
+      [entryPoints.https.auth.basic]
+        removeHeader = true
+        users = [
+          "ubuntu:$2y$05$SoI2FecalD/H3ftOXbrYUekqNkxA6zbYgUPiUjJShyPR.0iEk95Ni"
+        ]
+
 [docker]
 watch = true
